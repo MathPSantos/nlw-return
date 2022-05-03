@@ -1,1 +1,2 @@
-export * from "./FeedbackWidget/FeedbackWidget.component";
+export * from "./Feedback/Feedback.component";
+export * from "./CloseButton/CloseButton.component";
