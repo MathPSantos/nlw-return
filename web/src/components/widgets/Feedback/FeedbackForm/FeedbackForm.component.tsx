@@ -41,6 +41,7 @@ export function FeedbackForm() {
 
   function handleRestartFeedback() {
     setFeedbackType(null);
+    setFeedbackSent(false);
   }
 
   return (
