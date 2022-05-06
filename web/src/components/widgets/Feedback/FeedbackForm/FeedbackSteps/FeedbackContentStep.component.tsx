@@ -5,6 +5,8 @@ import { CloseButton } from "../../../CloseButton/CloseButton.component";
 import { ScreenshotButton } from "../ScreenshotButton/ScreenshotButton.component";
 
 import { ArrowLeftIcon } from "../../../../../core/shared/icons";
+import { api } from "../../../../../core/services/api";
+import { LoadingIndicator } from "../../../../elements";
 
 interface FeedbackContentStepProps {
   feedbackType: FeedbackType;
@@ -19,14 +21,22 @@ export function FeedbackContentStep({
 }: FeedbackContentStepProps) {
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [comment, setComment] = useState("");
+  const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
   const feedbackTypeInfo = FEEDBACK_TYPES[feedbackType];
 
-  function handleSubmitFeedback(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmitFeedback(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    console.log(comment, screenshot);
+    setIsSendingFeedback(true);
 
+    await api.post("/feedbacks", {
+      comment,
+      screenshot,
+      type: feedbackType,
+    });
+
+    setIsSendingFeedback(false);
     onFeedbackSent();
   }
 
@@ -63,11 +73,11 @@ export function FeedbackContentStep({
           />
 
           <button
-            className="p-2 bg-brand-500 rounded-md border-transparent flex-1 items-center justify-center text-sm hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-brand-500"
-            disabled={comment.length === 0}
+            className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex items-center justify-center text-sm hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-brand-500"
+            disabled={comment.length === 0 || isSendingFeedback}
             type="submit"
           >
-            Enviar feedback
+            {isSendingFeedback ? <LoadingIndicator /> : "Enviar feedback"}
           </button>
         </footer>
       </form>

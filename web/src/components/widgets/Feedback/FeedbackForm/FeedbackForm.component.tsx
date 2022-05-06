@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { CloseButton } from "../../";
 import { FeedbackTypesStep } from "./FeedbackSteps/FeedbackTypeStep.component";
 
 import bugImageUrl from "../../../../assets/bug.svg";
